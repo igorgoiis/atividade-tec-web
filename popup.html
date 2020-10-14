@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Cadastro</title>
+</head>
+<body>
+  <header class="popup">
+    <div class="container">
+      <div class="logo">
+        <img src="./img/Group 18.svg" alt="Logo">
+      </div>
+    </div>
+  </header>
+  <main class="popup">
+    <div class="container">
+      <div>
+        <label for="titulo">Título</label>
+        <input type="text" name="titulo" id="titulo">
+      </div>
+      <div>
+        <label for="tipo">Entrada/Saída</label>
+        <select name="tipo" id="tipo">
+          <option value="entrada">Entrada</option>
+          <option value="saida">Saída</option>
+        </select>
+      </div>
+      <div>
+        <label for="valor">Valor</label>
+        <input type="text" name="valor" id="valor">
+      </div>
+      <div>
+        <label for="categoria">Categoria</label>
+        <input type="text" name="categoria" id="categoria">
+      </div>
+      <div>
+        <label for="data">Data</label>
+        <input type="date" name="data" id="date" class="input-data">
+      </div>
+      <a href="javascript:closePopup()">
+        <button type="submit" >Cadastrar</button>
+      </a>
+    </div>
+  </main>
+  <footer>
+    
+  </footer>
+
+  <script src="./script.js"></script>
+</body>
+</html>
