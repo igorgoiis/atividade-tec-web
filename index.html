@@ -53,7 +53,7 @@
         </div>
         <div>
           <label for="valor">Valor</label>
-          <input type="text" name="valor" id="valor">
+          <input inputmode="numeric" value="0,00" name="valor" id="valor">
         </div>
         <div>
           <label for="categoria">Categoria</label>
@@ -84,6 +84,30 @@
   <footer>
     
   </footer>
-  <script src="./script.js"></script>
+  <script src="./js/simple-mask-money.js"></script>
+  <script src="./js/script.js"></script>
+  <script>
+    // configuration
+    const args = {
+      // afterFormat(e) { console.log('afterFormat', e); },
+      // allowNegative: false,
+      // beforeFormat(e) { console.log('beforeFormat', e); },
+      negativeSignAfter: false,
+      prefix: '',
+      suffix: '',
+      fixed: true,
+      fractionDigits: 2,
+      decimalSeparator: ',',
+      thousandsSeparator: '.',
+      cursor: 'move'
+    };
+
+    // select the element
+    const input = SimpleMaskMoney.setMask('#valor', args);
+
+    // This method return value of your input in format number to save in your database
+    input.formatToNumber();
+
+  </script>
 </body>
 </html>
