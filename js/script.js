@@ -1,8 +1,10 @@
+
+
 let db = [];
 agora = new Date;
 data = agora.getDate() + '/' + agora.getMonth() + '/' + agora.getFullYear();
-function cadastrar() {
-  data = agora.getDate() + '/' + agora.getMonth() + '/' + agora.getFullYear();
+
+function cadastrarReceita() {
   titulo = document.getElementById('titulo').value;
   tipo = document.getElementById('tipo').value;
   valor = document.getElementById('valor').value;
