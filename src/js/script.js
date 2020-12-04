@@ -1,4 +1,21 @@
-$()
+$(document).ready(function() {
+    $('#cadastrar_receita').on('click', function() {
+      let titulo = $('#titulo_receita');
+      let valor = $('#valor_receita');
+      let data = $('#data_receita');
+      let descricao = $('#descricao_receita');
+
+      
+
+      if (!titulo.val() || !valor.val() || !data.val() || !descricao.val()) {
+        console.log($('#TituloModalCentralizado'));
+        let alert = '<div class="alert alert-danger" role="alert" style="">Todos os campos são obrigatórios!</div>'
+        $('#TituloModalCentralizado').append(alert);
+      }
+
+
+    });
+});
 
 let db = [];
 agora = new Date;

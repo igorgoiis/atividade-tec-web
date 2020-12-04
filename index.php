@@ -19,21 +19,21 @@
         <div class="entradas">
           <div class="titulo">
             <span>Entradas</span>
-            <img src="./img/Entradas.svg" alt="">
+            <img src="./src/img/Entradas.svg" alt="">
           </div>
           <span id="total-entrada">R$ 00,00</span>
         </div>
         <div class="saidas">
           <div class="titulo">
             <span>Saídas</span>
-            <img src="./img/Saídas.svg" alt="">
+            <img src="./src/img/Saídas.svg" alt="">
           </div>
           <span id="total-saida">R$ 00,00</span>
         </div>
         <div class="total">
           <div class="titulo">
             <span>Total</span>
-            <img src="./img/Total.svg" alt="">
+            <img src="./src/img/Total.svg" alt="">
           </div>
           <span id="total-total">R$ 00,00</span>
         </div>
@@ -68,11 +68,11 @@
       </button>
       <div class="dropdown-menu">
         <!-- Botão para acionar modal -->
-        <button type="button" class="btn btn-success receita" data-toggle="modal" data-target="#ModalReceita">
+        <button type="button" id="receita" class="btn btn-success receita" data-toggle="modal" data-target="#ModalReceita">
           <i class="far fa-arrow-up"></i>
         </button>
         <!-- Botão para acionar modal -->
-        <button type="button" class="btn btn-danger despesa" data-toggle="modal" data-target="#ModalDespesa">
+        <button type="button" id="despesa" class="btn btn-danger despesa" data-toggle="modal" data-target="#ModalDespesa">
           <i class="far fa-arrow-down"></i>
         </button>
       </div>
@@ -101,17 +101,17 @@
               </div>
               <div class="form-group">
                 <label for="data_receita">Data</label>
-                <input class="form-control" type="date" id="data_receita">
+                <input class="form-control" type="date" value="<?php echo date('Y-m-d'); ?>" id="data_receita">
               </div>
               <div class="form-group">
                 <label for="descricao">Descrição</label>
-                <textarea class="form-control" id="descricao" rows="3"></textarea>
+                <textarea class="form-control" id="descricao_receita" rows="3"></textarea>
               </div>
             </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-            <button type="button" class="btn btn-success">Salvar receita</button>
+            <button type="submit" class="btn btn-success" id="cadastrar_receita">Salvar receita</button>
           </div>
         </div>
       </div>
@@ -139,7 +139,7 @@
               </div>
               <div class="form-group">
                 <label for="data_receita">Data</label>
-                <input class="form-control" type="date" id="data_receita">
+                <input class="form-control" type="date" value="<?php echo date('Y-m-d'); ?>" id="data_receita">
               </div>
               <div class="form-group">
                 <label for="descricao">Descrição</label>
