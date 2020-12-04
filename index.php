@@ -47,16 +47,12 @@
           <tr>
             <th scope="col">Título</th>
             <th scope="col">Preço</th>
+            <th scope="col">Descrição</th>
             <th scope="col">Categoria</th>
             <th scope="col">Data</th>
           </tr>
         </thead>
-        <tbody>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
-          </tr>
+        <tbody id="dados_tabela">
         </tbody>
       </table>
     </div>
@@ -104,18 +100,41 @@
                 <input class="form-control" type="date" value="<?php echo date('Y-m-d'); ?>" id="data_receita">
               </div>
               <div class="form-group">
-                <label for="descricao">Descrição</label>
+                <label for="descricao_receita">Descrição</label>
                 <textarea class="form-control" id="descricao_receita" rows="3"></textarea>
               </div>
             </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-            <button type="submit" class="btn btn-success" id="cadastrar_receita">Salvar receita</button>
+            <button type="button" class="btn btn-success" id="cadastrar_receita">Salvar receita</button>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Modal Confirmação Receita -->
+    <div class="modal" id="ModalCadastroReceita" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Receita Cadastrada</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+          <div class="alert alert-success" role="alert">
+            Receita cadastrada com sucesso!
+          </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Modal -->
     <div class="modal fade" id="ModalDespesa" tabindex="-1" role="dialog" aria-labelledby="TituloModalCentralizado" aria-hidden="true">
       <div class="modal-dialog" role="document">
@@ -130,30 +149,53 @@
           <div class="modal-body">
             <form>
               <div class="form-group">
-                <label for="titulo_receita">Título da Despesa</label>
-                <input type="text" class="form-control" id="titulo_receita" placeholder="Aluguel">
+                <label for="titulo_despesa">Título da Despesa</label>
+                <input type="text" class="form-control" id="titulo_despesa" placeholder="Aluguel">
               </div>
               <div class="form-group">
-                <label for="valor_receita">Valor</label>
-                <input type="text" class="form-control" id="valor_receita" placeholder="R$ 00,00">
+                <label for="valor_despesa">Valor</label>
+                <input type="text" class="form-control" id="valor_despesa" placeholder="R$ 00,00">
               </div>
               <div class="form-group">
-                <label for="data_receita">Data</label>
-                <input class="form-control" type="date" value="<?php echo date('Y-m-d'); ?>" id="data_receita">
+                <label for="data_despesa">Data</label>
+                <input class="form-control" type="date" value="<?php echo date('Y-m-d'); ?>" id="data_despesa">
               </div>
               <div class="form-group">
-                <label for="descricao">Descrição</label>
-                <textarea class="form-control" id="descricao" rows="3"></textarea>
+                <label for="descricao_despesa">Descrição</label>
+                <textarea class="form-control" id="descricao_despesa" rows="3"></textarea>
               </div>
             </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-            <button type="button" class="btn btn-danger">Salvar despesa</button>
+            <button type="button" class="btn btn-danger" id="cadastrar_despesa">Salvar despesa</button>
           </div>
         </div>
       </div>
     </div>
+
+     <!-- Modal Confirmação Receita -->
+     <div class="modal" id="ModalCadastroDespesa" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Depesa Cadastrada</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+          <div class="alert alert-success" role="alert">
+            Despesa cadastrada com sucesso!
+          </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </footer>
 
   <!-- JavaScript (Opcional) -->
@@ -164,28 +206,5 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
   <script src="./src/js/simple-mask-money.js"></script>
   <script src="./src/js/script.js"></script>
-  <script>
-    // configuration
-    const args = {
-      // afterFormat(e) { console.log('afterFormat', e); },
-      // allowNegative: false,
-      // beforeFormat(e) { console.log('beforeFormat', e); },
-      negativeSignAfter: false,
-      prefix: '',
-      suffix: '',
-      fixed: true,
-      fractionDigits: 2,
-      decimalSeparator: ',',
-      thousandsSeparator: '.',
-      cursor: 'move'
-    };
-
-    // select the element
-    const input = SimpleMaskMoney.setMask('#valor', args);
-
-    // This method return value of your input in format number to save in your database
-    input.formatToNumber();
-
-  </script>
 </body>
 </html>

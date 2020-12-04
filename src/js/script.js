@@ -1,91 +1,120 @@
+let db = [];
 $(document).ready(function() {
-    $('#cadastrar_receita').on('click', function() {
-      let titulo = $('#titulo_receita');
-      let valor = $('#valor_receita');
-      let data = $('#data_receita');
-      let descricao = $('#descricao_receita');
+  $('#cadastrar_receita').on('click', function() {
+    let titulo = $('#titulo_receita').val();
+    let valor = $('#valor_receita').val();
+    let data = $('#data_receita').val();
+    let descricao = $('#descricao_receita').val();
+    let categoria = 'Receita';
 
-      
-
-      if (!titulo.val() || !valor.val() || !data.val() || !descricao.val()) {
-        console.log($('#TituloModalCentralizado'));
-        let alert = '<div class="alert alert-danger" role="alert" style="">Todos os campos são obrigatórios!</div>'
-        $('#TituloModalCentralizado').append(alert);
+    if (!titulo || !valor || !data) {
+      console.log($('#TituloModalCentralizado'));
+      let alert =`<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Todos os campos</strong> devem ser preenchidos!
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>`;
+                  
+      $('#TituloModalCentralizado').append(alert);
+    } else {
+      $('#ModalReceita').modal('toggle');
+      $('#ModalCadastroReceita').modal('show');
+      dados = {
+        titulo,
+        valor,
+        data,
+        descricao,
+        categoria,
       }
+      db.push(dados);
+      inserirTabela();
+      mostrarValores();
+    }
+  });
+
+  $('#cadastrar_despesa').on('click', function() {
+    let titulo = $('#titulo_despesa').val();
+    let valor = $('#valor_despesa').val();
+    let data = $('#data_despesa').val();
+    let descricao = $('#descricao_despesa').val();
+    let categoria = 'Despesa';
+
+    if (!titulo || !valor || !data) {
+      console.log($('#TituloModalCentralizado'));
+      let alert =`<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Todos os campos</strong> devem ser preenchidos!
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>`;
+                  
+      $('#TituloModalCentralizado').append(alert);
+    } else {
+      $('#ModalDespesa').modal('toggle');
+      $('#ModalCadastroDespesa').modal('show');
+      dados = {
+        titulo,
+        valor,
+        data,
+        descricao,
+        categoria,
+      }
+      db.push(dados);
+      inserirTabela();
+      mostrarValores();
+    }
+  });
 
 
-    });
 });
 
-let db = [];
-agora = new Date;
-data = agora.getDate() + '/' + agora.getMonth() + '/' + agora.getFullYear();
-
-function cadastrarReceita() {
-  titulo = document.getElementById('titulo').value;
-  tipo = document.getElementById('tipo').value;
-  valor = document.getElementById('valor').value;
-  categoria = document.getElementById('categoria').value;
-  
-  
-  dados = {
-    titulo,
-    tipo,
-    valor,
-    categoria,
-    data
-  }
-  
-  db.push(dados);
-  mostrar();
-  entradas();
-}
-
-function mostrar() {
+function inserirTabela() {
   inserir = '';
   for (let i = 0; i < db.length; i++) {
     const element = db[i];
-    tabela = document.getElementById('tabela');
-    if (element.tipo == 'entrada') {
-      inserir = inserir + '<tr><td><span>' + element.titulo + 
-    '</span></td> <td><span style="color: #12A454;">R$' + element.valor.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' }) +
-    '</span></td><td><span>' + element.categoria + 
-    '</span></td><td><span>' + element.data + '</span></td></tr>';
+
+    valor = tirarPontos(element.valor);
+
+    if (element.categoria == 'Receita') {
+      inserir = inserir + `
+      <tr style="background: #D4EDDA;">
+        <td>${element.titulo}</td>
+        <td>${valor.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' })}</td>
+        <td>${element.descricao}</td>
+        <td>${element.categoria}</td>
+        <td>${element.data}</td>
+      </tr>`;
     } else {
-      inserir = inserir + '<tr><td><span>' + element.titulo + 
-    '</span></td> <td><span style="color: #E83F5B;">R$' + element.valor.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' }) +
-    '</span></td><td><span>' + element.categoria + 
-    '</span></td><td><span>' + element.data + '</span></td></tr>';
+      inserir = inserir + `
+      <tr style="background: #F8D7DA;">
+        <td>${element.titulo}</td>
+        <td>${valor.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' })}</td>
+        <td>${element.descricao}</td>
+        <td>${element.categoria}</td>
+        <td>${element.data}</td>
+      </tr>`;
     }
-    
-    
   }
-  tabela.innerHTML = inserir;
+  $('#dados_tabela').html(inserir);
 }
 
-function entradas() {
+function mostrarValores() {
   let totalEntrada = 0.00;
   let totalSaida = 0.00;
   for (let i = 0; i < db.length; i++) {
     const element = db[i];
-    if (element.tipo == 'entrada') {
+    if (element.categoria == 'Receita') {
       totalEntrada = totalEntrada + tirarPontos(element.valor);
     } else {
       totalSaida = totalSaida + tirarPontos(element.valor);
     }
   }
-
-  totalEntrada = totalEntrada / 100;
-  totalSaida = totalSaida / 100;
   
   valorTotal = totalEntrada - totalSaida;
-  entrada = document.getElementById('total-entrada');
-  saida = document.getElementById('total-saida');
-  total = document.getElementById('total-total');
-
-  entrada.innerHTML = totalEntrada.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' });
-  saida.innerHTML = totalSaida.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' });
-  total.innerHTML = valorTotal.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' });
+  $('#total-entrada').html(totalEntrada.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' }));
+  $('#total-saida').html(totalSaida.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' }));
+  $('#total-total').html(valorTotal.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' })) ;
 }
 
 function tirarPontos(num) {

@@ -171,11 +171,11 @@ table.table {
 div.btn-group.dropup button.btn.btn-secondary {
   background: #FF872C;
   position: fixed;
-  right: 50px;
+  right: 20px;
   bottom: 30px;
   border-radius: 50%;
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
 }
 
 div.btn-group.dropup button.btn.btn-secondary i.fal.fa-plus {
@@ -189,20 +189,20 @@ div.dropdown-menu {
 
 div.dropdown-menu button.btn.btn-success.receita, 
 div.dropdown-menu button.btn.btn-danger.despesa {
-  width: 70px;
-  height: 70px;
+  width: 50px;
+  height: 50px;
   position: fixed;
   border-radius: 50%;
 }
 
 div.dropdown-menu button.btn.btn-success.receita {
   bottom: 95px;
-  right: 50px;
+  right: 20px;
 }
 
 div.dropdown-menu button.btn.btn-danger.despesa {
   bottom: 15px;
-  right: 50px;
+  right: 20px;
 }
 
 div.dropdown-menu button.btn.btn-success.receita i.far.fa-arrow-up, 
