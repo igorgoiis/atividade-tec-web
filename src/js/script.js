@@ -1,16 +1,30 @@
 let db = [];
 $(document).ready(function() {
-  $('#cadastrar_receita').on('click', function() {
-    let titulo = $('#titulo_receita').val();
-    let valor = $('#valor_receita').val();
-    let data = $('#data_receita').val();
-    let descricao = $('#descricao_receita').val();
-    let categoria = 'Receita';
-
-    if (!titulo || !valor || !data) {
-      console.log($('#TituloModalCentralizado'));
-      let alert =`<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Todos os campos</strong> devem ser preenchidos!
+  url = 'http://localhost/controle-financeiro/controller';
+  mostrarTabela();
+  $('#cadastro_receita_form').on('submit', function(e) {
+    e.preventDefault();
+    if ($('#titulo_receita').val() == '') {
+      let alert =`<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    Por favor preencha o nome!
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>`;
+                  
+      $('#TituloModalCentralizado').append(alert);
+    } else if ($('#valor_receita').val() == '') {
+      let alert =`<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    Por favor preencha o valor!
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>`;
+                  
+      $('#TituloModalCentralizado').append(alert);
+    } else if ($('#data_receita').val() == '') {
+      let alert =`<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    Por favor preencha a data!
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
@@ -18,32 +32,47 @@ $(document).ready(function() {
                   
       $('#TituloModalCentralizado').append(alert);
     } else {
-      $('#ModalReceita').modal('toggle');
-      $('#ModalCadastroReceita').modal('show');
-      dados = {
-        titulo,
-        valor,
-        data,
-        descricao,
-        categoria,
-      }
-      db.push(dados);
-      inserirTabela();
-      mostrarValores();
+      $.ajax({
+        url: url + "/receita/cadastrar.php",
+        method: 'POST',
+        data: $('#cadastro_receita_form').serialize() + '&categoria=Receita',
+        success: function(response) {
+          $('#ModalReceita').modal('hide');
+          $('#cadastro_receita_form')[0].reset();
+          $('#ModalCadastroReceita').modal('show');
+          mostrarTabela();
+          mostrarValores();
+        },
+        error: function(error) {
+          console.log(error);
+        },
+      });
     }
   });
 
-  $('#cadastrar_despesa').on('click', function() {
-    let titulo = $('#titulo_despesa').val();
-    let valor = $('#valor_despesa').val();
-    let data = $('#data_despesa').val();
-    let descricao = $('#descricao_despesa').val();
-    let categoria = 'Despesa';
-
-    if (!titulo || !valor || !data) {
-      console.log($('#TituloModalCentralizado'));
-      let alert =`<div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>Todos os campos</strong> devem ser preenchidos!
+  $('#cadastro_despesa_form').on('submit', function(e) {
+    e.preventDefault();
+    if ($('#titulo_despesa').val() == '') {
+      let alert =`<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    Por favor preencha o nome!
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>`;
+                  
+      $('#TituloModalCentralizado').append(alert);
+    } else if ($('#valor_despesa').val() == '') {
+      let alert =`<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    Por favor preencha o valor!
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>`;
+                  
+      $('#TituloModalCentralizado').append(alert);
+    } else if ($('#data_despesa').val() == '') {
+      let alert =`<div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    Por favor preencha a data!
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
@@ -51,52 +80,68 @@ $(document).ready(function() {
                   
       $('#TituloModalCentralizado').append(alert);
     } else {
-      $('#ModalDespesa').modal('toggle');
-      $('#ModalCadastroDespesa').modal('show');
-      dados = {
-        titulo,
-        valor,
-        data,
-        descricao,
-        categoria,
-      }
-      db.push(dados);
-      inserirTabela();
-      mostrarValores();
+      $.ajax({
+        url: url + "/despesa/cadastrar.php",
+        method: 'POST',
+        data: $('#cadastro_despesa_form').serialize() + '&categoria=Despesa',
+        success: function(response) {
+          $('#ModalDespesa').modal('hide');
+          $('#cadastro_despesa_form')[0].reset();
+          $('#ModalCadastroDespesa').modal('show');
+          mostrarTabela();
+          mostrarValores();
+        },
+        error: function(error) {
+          console.log(error);
+        },
+      });
     }
   });
 
 
 });
 
-function inserirTabela() {
-  inserir = '';
-  for (let i = 0; i < db.length; i++) {
-    const element = db[i];
+function mostrarTabela() {
+  $.ajax({
+    type: 'GET',
+    dataType: 'html',
+    contentType: false,
+    url: url + '/buscar.php',    
+    success: function(response) {
+      if (!response.error) {
+        console.log(response);
+      }
+    },
+    error: function(error) {
+      console.log(error);
+    },
+  });
 
-    valor = tirarPontos(element.valor);
+  // for (let i = 0; i < db.length; i++) {
+  //   const element = db[i];
 
-    if (element.categoria == 'Receita') {
-      inserir = inserir + `
-      <tr style="background: #D4EDDA;">
-        <td>${element.titulo}</td>
-        <td>${valor.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' })}</td>
-        <td>${element.descricao}</td>
-        <td>${element.categoria}</td>
-        <td>${element.data}</td>
-      </tr>`;
-    } else {
-      inserir = inserir + `
-      <tr style="background: #F8D7DA;">
-        <td>${element.titulo}</td>
-        <td>${valor.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' })}</td>
-        <td>${element.descricao}</td>
-        <td>${element.categoria}</td>
-        <td>${element.data}</td>
-      </tr>`;
-    }
-  }
-  $('#dados_tabela').html(inserir);
+  //   valor = tirarPontos(element.valor);
+  //   if (element.categoria == 'Receita') {
+  //     inserir = inserir + `
+  //     <tr style="background: #D4EDDA;">
+  //       <td>${element.titulo}</td>
+  //       <td>${valor.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' })}</td>
+  //       <td>${element.descricao}</td>
+  //       <td>${element.categoria}</td>
+  //       <td>${element.data}</td>
+  //     </tr>`;
+  //   } else {
+  //     inserir = inserir + `
+  //     <tr style="background: #F8D7DA;">
+  //       <td>${element.titulo}</td>
+  //       <td>${valor.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' })}</td>
+  //       <td>${element.descricao}</td>
+  //       <td>${element.categoria}</td>
+  //       <td>${element.data}</td>
+  //     </tr>`;
+  //   }
+  // }
+  // $('#dados_tabela').html(inserir);
 }
 
 function mostrarValores() {
@@ -137,3 +182,19 @@ function tirarPontos(num) {
 
   return num;
 }
+
+$.fn.serializeObject = function() {
+  var o = {};
+  var a = this.serializeArray();
+  $.each(a, function() {
+    if (o[this.name]) {
+      if (!o[this.name].push) {
+        o[this.name] = [o[this.name]];
+      }
+      o[this.name].push(this.value || '');
+    } else {
+      o[this.name] = this.value || '';
+    }
+  });
+  return o;
+};
