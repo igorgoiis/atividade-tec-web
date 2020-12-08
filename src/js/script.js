@@ -42,6 +42,7 @@ $(document).ready(function() {
         method: 'POST',
         data: $('#cadastro_receita_form').serialize() + '&categoria=Receita',
         success: function(response) {
+          console.log(response);
           $('#ModalReceita').modal('hide');
           $('#cadastro_receita_form')[0].reset();
           $('#ModalCadastroReceita').modal('show');
@@ -225,7 +226,6 @@ $(document).ready(function() {
     // $('#total-total').html(valorTotal.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' })) ;
   }
 });
-
 
 $.fn.serializeObject = function() {
   var o = {};

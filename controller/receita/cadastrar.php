@@ -9,7 +9,8 @@ if (!empty($_POST)) {
   $data = mysqli_real_escape_string($connect, $_POST['data_receita']);
   $descricao = mysqli_real_escape_string($connect, $_POST['descricao_receita']);
   
-  $valor = doubleval(str_replace(".", "", $valor));
+  $valor = str_replace(".", "", $valor);
+  $valor = doubleval(str_replace(",", ".", $valor));
   
   $query = "insert into lancamentos(titulo, valor, descricao, tipo, data)
   value ('$titulo', $valor, '$descricao', '$categoria', '$data')";
