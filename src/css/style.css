@@ -209,3 +209,25 @@ div.dropdown-menu button.btn.btn-success.receita i.far.fa-arrow-up,
 div.dropdown-menu button.btn.btn-danger.despesa i.far.fa-arrow-down {
   font-size: 20px;
 }
+
+button.btn.btn-outline-danger {
+  border-color: #E83F5B;
+  color: #E83F5B;
+}
+
+button.btn.btn-outline-danger:hover {
+  border-color: #E83F5B;
+  background-color: #E83F5B;
+  color: #eee;
+}
+
+button.btn.btn-outline-warning {
+  border-color: #FF872C;
+  color: #FF872C;
+}
+
+button.btn.btn-outline-warning:hover {
+  border-color: #FF872C;
+  background-color: #FF872C;
+  color: #FFF;
+}

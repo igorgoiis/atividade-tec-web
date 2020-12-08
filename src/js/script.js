@@ -1,7 +1,12 @@
-let db = [];
 $(document).ready(function() {
   url = 'http://localhost/controle-financeiro/controller';
+
   mostrarTabela();
+  mostrarValores();
+
+  $('#valor_receita').maskMoney({prefix:'R$ ', allowNegative: true, thousands:'.', decimal:',', affixesStay: false});
+  $('#valor_despesa').maskMoney({prefix:'R$ ', allowNegative: true, thousands:'.', decimal:',', affixesStay: false});
+  
   $('#cadastro_receita_form').on('submit', function(e) {
     e.preventDefault();
     if ($('#titulo_receita').val() == '') {
@@ -97,91 +102,130 @@ $(document).ready(function() {
       });
     }
   });
-
-
-});
-
-function mostrarTabela() {
-  $.ajax({
-    type: 'GET',
-    dataType: 'html',
-    contentType: false,
-    url: url + '/buscar.php',    
-    success: function(response) {
-      if (!response.error) {
-        console.log(response);
+  
+  $(document).on('click', '.btn-edit', function(e) {
+    e.preventDefault();
+    const id = $(this).attr('data-id');
+    $.ajax({
+      type: 'GET',
+      url: url + '/buscar-lancamento.php?id=' + id,
+      success: function(response) {
+        if (!response.error) {
+          $('#editar_lancamento_form').html(response);
+          $('#valor_lancamento').maskMoney({prefix:'R$ ', allowNegative: true, thousands:'.', decimal:',', affixesStay: false});
+        }
+      },
+      error: function(error) {
+          console.error(error);
       }
-    },
-    error: function(error) {
-      console.log(error);
-    },
+    });
+    $('#ModalEditarLancamento').modal('show');
+    $(document).on('click', '#atualizar_lancamento', function(e) {
+      e.preventDefault();
+      $.ajax({
+        url: url + "/atualizar.php",
+        method: 'POST',
+        data: $('#editar_lancamento_form').serialize() + '&id=' + id,
+        success: function(response) {
+          $('#ModalEditarLancamento').modal('hide');
+          $('#editar_lancamento_form')[0].reset();
+          mostrarTabela();
+          mostrarValores();
+        },
+        error: function(error) {
+          console.log(error);
+        },
+      });
+    });
   });
 
-  // for (let i = 0; i < db.length; i++) {
-  //   const element = db[i];
+  $(document).on('click', '.btn-remove', function(e) {
+    e.preventDefault();
+    const id = $(this).attr('data-id');
+    const result = window.confirm('Quer realmente excluir esse usuário?');
 
-  //   valor = tirarPontos(element.valor);
-  //   if (element.categoria == 'Receita') {
-  //     inserir = inserir + `
-  //     <tr style="background: #D4EDDA;">
-  //       <td>${element.titulo}</td>
-  //       <td>${valor.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' })}</td>
-  //       <td>${element.descricao}</td>
-  //       <td>${element.categoria}</td>
-  //       <td>${element.data}</td>
-  //     </tr>`;
-  //   } else {
-  //     inserir = inserir + `
-  //     <tr style="background: #F8D7DA;">
-  //       <td>${element.titulo}</td>
-  //       <td>${valor.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' })}</td>
-  //       <td>${element.descricao}</td>
-  //       <td>${element.categoria}</td>
-  //       <td>${element.data}</td>
-  //     </tr>`;
-  //   }
-  // }
-  // $('#dados_tabela').html(inserir);
-}
-
-function mostrarValores() {
-  let totalEntrada = 0.00;
-  let totalSaida = 0.00;
-  for (let i = 0; i < db.length; i++) {
-    const element = db[i];
-    if (element.categoria == 'Receita') {
-      totalEntrada = totalEntrada + tirarPontos(element.valor);
-    } else {
-      totalSaida = totalSaida + tirarPontos(element.valor);
+    if (result) {
+      $.ajax({
+        type: 'GET',
+        url: url + '/remover.php?id=' + id,
+        success: function(response) {
+          if (!response.error) {
+            mostrarTabela();
+            mostrarValores();
+          }
+        },
+        error: function(error) {
+          console.error(error);
+        }
+      })
     }
-  }
-  
-  valorTotal = totalEntrada - totalSaida;
-  $('#total-entrada').html(totalEntrada.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' }));
-  $('#total-saida').html(totalSaida.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' }));
-  $('#total-total').html(valorTotal.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' })) ;
-}
+  })
 
-function tirarPontos(num) {
-  let temp = '';
-  temp = num.split('.');
-  let aux = "";
-  for (let i = 0; i < temp.length; i++) {
-    const element = temp[i];
-    aux = aux + element;
-  }
-  num = aux;
-  
-  temp = num.split(',');
-  aux = "";
-  for (let i = 0; i < temp.length; i++) {
-    const element = temp[i];
-    aux = aux + element;
-  }
-  num = parseFloat(aux);
+  function mostrarTabela() {
+    $.ajax({
+        type: 'GET',
+        dataType: 'html',
+        contentType: false,
+        url: url + '/buscar.php',    
+        success: function(response) {
+          if (!response.error) {
+            $('#dados_tabela').html(response);
+            valores = $('.valor');
+            for (i=0; i<valores.length; i++){
+              valor = parseFloat(valores[i].innerHTML);
+              valores[i].innerHTML = valor.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' });
+            }
+          }
+        },
+        error: function(error) {
+          console.log(error);
+        },
+      });
+    }
 
-  return num;
-}
+  function mostrarValores() {
+    $.ajax({
+      type: 'GET',
+      url: url + '/buscar-valores.php',    
+      success: function(response) {
+        if (!response.error) {
+          totais = JSON.parse(response);
+          receita_total = parseFloat(totais.receita);
+          despesa_total = parseFloat(totais.despesa);
+          if (isNaN(receita_total)) {
+            receita_total = 0;
+          }
+          if (isNaN(despesa_total)) {
+            despesa_total = 0;
+          }
+          total = receita_total - despesa_total;
+          $('#total-entrada').html(receita_total.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' }));
+          $('#total-saida').html(despesa_total.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' }));
+          $('#total-total').html(total.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' })) ;
+        }
+      },
+      error: function(error) {
+        console.log(error);
+      },
+    });
+    // let totalEntrada = 0.00;
+    // let totalSaida = 0.00;
+    // for (let i = 0; i < db.length; i++) {
+    //   const element = db[i];
+    //   if (element.categoria == 'Receita') {
+    //     totalEntrada = totalEntrada + tirarPontos(element.valor);
+    //   } else {
+    //     totalSaida = totalSaida + tirarPontos(element.valor);
+    //   }
+    // }
+    
+    // valorTotal = totalEntrada - totalSaida;
+    // $('#total-entrada').html(totalEntrada.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' }));
+    // $('#total-saida').html(totalSaida.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' }));
+    // $('#total-total').html(valorTotal.toLocaleString('pt-br',{ style: 'currency', currency: 'BRL' })) ;
+  }
+});
+
 
 $.fn.serializeObject = function() {
   var o = {};
