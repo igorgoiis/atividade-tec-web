@@ -12,9 +12,6 @@
 <body>
   <header>
     <div class="container">
-      <div class="logo">
-        <img src="./src/img/Group 18.svg" alt="Logo">
-      </div>
       <div class="display">
         <div class="entradas">
           <div class="titulo">
