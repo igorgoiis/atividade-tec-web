@@ -143,7 +143,7 @@ $(document).ready(function() {
   $(document).on('click', '.btn-remove', function(e) {
     e.preventDefault();
     const id = $(this).attr('data-id');
-    const result = window.confirm('Quer realmente excluir esse usuário?');
+    const result = window.confirm('Quer realmente excluir esse lançamento?');
 
     if (result) {
       $.ajax({
